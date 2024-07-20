@@ -27,7 +27,7 @@ const parseTemplate = (template: string, context: any) => {
     try {
       if (group.trim()[0] === "@") {
         group = `features.${group.trim().substring(1)}`;
-        group = group.replace(/\)$/m, ", context)");
+        group = group.replace(/\)$/m, ", context, evalFunc)");
       }
       debugger;
       let result = evalFunc(group);

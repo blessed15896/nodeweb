@@ -20,7 +20,7 @@ app.use(helmet());
 app.use(express.json());
 
 app.get("/dynamic/:file", (req, res) => {
-  res.render(`${req.params.file}.custom`, { message: "Hello template" });
+  res.render(`${req.params.file}.custom`, { message: "Hello template", req });
 });
 
 app.post("/test", testHandler);
