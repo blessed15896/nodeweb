@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
       )
       .every((v) => v === true);
-    console.log("allValid -->", allValid);
     if (!allValid) {
       ev.preventDefault();
     }
