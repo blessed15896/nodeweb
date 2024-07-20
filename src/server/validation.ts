@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import validator from "validator";
 
 type ValidatedRequest = Request & {
   validation: {
@@ -32,17 +33,18 @@ export const validate = (propName: string) => {
   };
 
   handler.required = () => {
-    tests.required = (val: string) => val?.trim().length > 0;
+    tests.required = (val: string) =>
+      !validator.isEmpty(val, { ignore_whitespace: true });
     return handler;
   };
 
   handler.minLength = (min: number) => {
-    tests.minLength = (val: string) => val?.trim().length >= min;
+    tests.minLength = (val: string) => validator.isLength(val, { min });
     return handler;
   };
 
   handler.isInteger = () => {
-    tests.isInteger = (val: string) => /^[0-9]+$/.test(val);
+    tests.isInteger = (val: string) => validator.isInt(val);
     return handler;
   };
 
