@@ -3,7 +3,8 @@ import express from "express";
 import httpProxy from "http-proxy";
 import helmet from "helmet";
 import { testHandler } from "./testHandler";
-import { registerCustomTemplateEngine } from "./custom_engine";
+import { engine } from "express-handlebars";
+import * as helpers from "./template_helpers";
 
 const port = 5000;
 
@@ -13,14 +14,19 @@ const proxy = httpProxy.createProxyServer({
   ws: true,
 });
 
-registerCustomTemplateEngine(app);
 app.set("views", "templates/server");
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
 
 app.use(helmet());
 app.use(express.json());
 
 app.get("/dynamic/:file", (req, res) => {
-  res.render(`${req.params.file}.custom`, { message: "Hello template", req });
+  res.render(`${req.params.file}.handlebars`, {
+    message: "Hello template",
+    req,
+    helpers: { ...helpers },
+  });
 });
 
 app.post("/test", testHandler);

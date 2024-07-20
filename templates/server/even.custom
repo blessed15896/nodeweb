@@ -1,3 +1,0 @@
-<h4 class="bg-secondary text-white my-2 p-2">
-  Even value: {{ req.query.c ?? 0 }}
-</h4>

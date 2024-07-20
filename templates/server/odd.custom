@@ -1,3 +1,0 @@
-<h4 class="bg-primary text-white my-2 p-2">
-  Odd value: {{ req.query.c ?? 0 }}
-</h4>

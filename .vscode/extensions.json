@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "ecmel.vscode-html-css",
+    "esbenp.prettier-vscode",
+    "ionutvmi.path-autocomplete",
+    "itsmeadarsh.vsc-handlebars-ext",
+    "pkief.material-icon-theme"
+  ]
+}
