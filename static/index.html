@@ -9,7 +9,22 @@
   </head>
   <body>
     <div class="container">
-      <div id="target"></div>
+      <form action="/form">
+        <div class="m-2">
+          <label class="form-label">Name</label>
+          <input name="name" type="text" class="form-control" />
+        </div>
+        <div class="m-2">
+          <label class="form-label">City</label>
+          <input name="city" type="text" class="form-control" />
+        </div>
+        <div class="m-2">
+          <button class="btn btn-primary" formmethod="get">Submit (GET)</button>
+          <button class="btn btn-primary" formmethod="post">
+            Submit (POST)
+          </button>
+        </div>
+      </form>
     </div>
   </body>
 </html>

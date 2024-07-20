@@ -5,6 +5,7 @@ import helmet from "helmet";
 import { testHandler } from "./testHandler";
 import { engine } from "express-handlebars";
 import * as helpers from "./template_helpers";
+import { registerFormMiddleware, registerFormRoutes } from "./forms";
 
 const port = 5000;
 
@@ -20,6 +21,9 @@ app.set("view engine", "handlebars");
 
 app.use(helmet());
 app.use(express.json());
+
+registerFormMiddleware(app);
+registerFormRoutes(app);
 
 app.get("/dynamic/:file", (req, res) => {
   res.render(`${req.params.file}.handlebars`, {

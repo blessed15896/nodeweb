@@ -1,9 +1,0 @@
-<a href="/dynamic/counter?c={{ increment req.query.c }}" class="btn btn-primary">
-  Increment
-</a>
-
-{{#if (isOdd req.query.c)}}
-  {{> odd }}
-{{else}}
-  {{> even }}
-{{/if}}
