@@ -1,13 +1,21 @@
-document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById("btn").addEventListener("click", sendReq);
-});
+import { Counter } from "./counter_custom";
 
-sendReq = async () => {
-  const response = await fetch("/test", {
-    method: "POST",
-    body: JSON.stringify({ message: "Hello, World!" }),
-    headers: { "content-type": "application/json" },
-  });
-  document.getElementById("msg").textContent = response.statusText;
-  document.getElementById("body").innerHTML = await response.text();
+const context = { counter: 0 };
+
+const actions = {
+  incrementCounter: () => {
+    context.counter++;
+    render();
+  },
 };
+
+const render = () =>
+  (document.getElementById("target").innerHTML = Counter(context));
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.onclick = (ev) => {
+    const action = ev.target.getAttribute("action");
+    if (action && actions[action]) actions[action]();
+  };
+  render();
+});
