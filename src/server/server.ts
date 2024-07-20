@@ -2,9 +2,7 @@ import { createServer } from "http";
 import express from "express";
 import httpProxy from "http-proxy";
 import helmet from "helmet";
-import { testHandler } from "./testHandler";
 import { engine } from "express-handlebars";
-import * as helpers from "./template_helpers";
 import { registerFormMiddleware, registerFormRoutes } from "./forms";
 
 const port = 5000;
@@ -25,15 +23,7 @@ app.use(express.json());
 registerFormMiddleware(app);
 registerFormRoutes(app);
 
-app.get("/dynamic/:file", (req, res) => {
-  res.render(`${req.params.file}.handlebars`, {
-    message: "Hello template",
-    req,
-    helpers: { ...helpers },
-  });
-});
-
-app.post("/test", testHandler);
+app.use("^/$", (req, res) => res.redirect("/form"));
 
 app.use(express.static("static"));
 app.use(express.static("node_modules/bootstrap/dist"));
