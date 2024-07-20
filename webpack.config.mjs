@@ -16,4 +16,12 @@ export default {
     port: 5100,
     client: { webSocketURL: "http://localhost:5000/ws" },
   },
+  module: {
+    rules: [{ test: /\.handlebars$/, loader: "handlebars-loader" }],
+  },
+  resolve: {
+    alias: {
+      "@templates": path.resolve(__dirname, "templates/client"),
+    },
+  },
 };
