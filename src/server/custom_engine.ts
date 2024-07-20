@@ -13,9 +13,12 @@ const renderTemplate = (
 };
 
 const parseTemplate = (template: string, context: any) => {
+  const ctx = Object.keys(context)
+    .map((k) => `const ${k} = context.${k}`)
+    .join(";");
   const expr = /{{(.*)}}/gm;
   return template.toString().replace(expr, (match, group) => {
-    return context[group.trim()] ?? "(no data)";
+    return eval(`${ctx};${group}`);
   });
 };
 
