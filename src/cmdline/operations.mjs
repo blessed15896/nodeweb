@@ -6,6 +6,18 @@ export const ops = {
     const name = await input({ message: "Name?" });
     await sendRequest("GET", `/api/results?name=${name}`);
   },
+  Store: async () => {
+    const values = {
+      name: await input({ message: "Name?" }),
+      age: await input({ message: "Age?" }),
+      years: await input({ message: "Years?" }),
+    };
+    await sendRequest("POST", "/api/results", values);
+  },
+  Delete: async () => {
+    const id = await input({ message: "ID?" });
+    await sendRequest("DELETE", `/api/results/${id}`);
+  },
   Test: () => {
     console.log("Test operation selected");
   },

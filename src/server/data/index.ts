@@ -1,8 +1,7 @@
 import { OrmRepository } from "./orm_repository";
-import { Repository } from "./repository";
-import { SqlRepository } from "./sqlRepository";
+import { ApiRepository } from "./repository";
 
 // const repository: Repository = new SqlRepository();
-const repository: Repository = new OrmRepository();
+const repository: ApiRepository = new OrmRepository();
 
 export default repository;
