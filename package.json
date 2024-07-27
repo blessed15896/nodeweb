@@ -6,13 +6,15 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "client": "webpack serve",
     "server": "tsc-watch --noClear --onSuccess \"node dist/server/server.js\"",
-    "start": "npm-run-all --parallel server client"
+    "start": "npm-run-all --parallel server client",
+    "cmdline": "node --watch ./src/cmdline/main.mjs"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@inquirer/prompts": "^5.3.2",
     "bootstrap": "^5.3.3",
     "connect-session-sequelize": "^7.1.7",
     "cookie-parser": "^1.4.6",
