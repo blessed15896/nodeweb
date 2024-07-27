@@ -2,7 +2,6 @@ import express from "express";
 import type { Express } from "express";
 import repository from "./data";
 import cookieParser from "cookie-parser";
-// import { CustomSessionMiddleware } from "./sessions/middleware";
 import { getSession, sessionMiddleware } from "./sessions/helper";
 
 const rowLimit = 10;
@@ -10,7 +9,6 @@ const rowLimit = 10;
 export const registerFormMiddleware = (app: Express) => {
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser("mysecret"));
-  // app.use(CustomSessionMiddleware());
   app.use(sessionMiddleware());
 };
 
