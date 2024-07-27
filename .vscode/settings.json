@@ -19,7 +19,7 @@
   },
   "editor.tabSize": 2,
   "workbench.iconTheme": "material-icon-theme",
-  "workbench.colorTheme": "Visual Studio Dark",
+  "workbench.colorTheme": "Default Light+",
   "css.styleSheets": ["node_modules/bootstrap/dist/css/bootstrap.min.css"],
   "css.enabledLanguages": ["html", "handlebars"]
 }

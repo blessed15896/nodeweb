@@ -1,5 +1,6 @@
 import { getCookie, setCookie } from "../cookies";
 import { MemoryRepository } from "./memory_repository";
+import { OrmRepository } from "./orm_repository";
 import { SessionRepository } from "./repository";
 import type { Request, Response, NextFunction } from "express";
 
@@ -9,7 +10,8 @@ const expirySeconds = 300;
 const getExpiryDate = () => new Date(Date.now() + expirySeconds * 1_000);
 
 export const CustomSessionMiddleware = () => {
-  const repo: SessionRepository = new MemoryRepository();
+  // const repo: SessionRepository = new MemoryRepository();
+  const repo: SessionRepository = new OrmRepository();
 
   return async (req: Request, res: Response, next: NextFunction) => {
     const id = getCookie(req, sessionCookieName);
