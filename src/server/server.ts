@@ -4,6 +4,7 @@ import httpProxy from "http-proxy";
 import helmet from "helmet";
 import { engine } from "express-handlebars";
 import { registerFormMiddleware, registerFormRoutes } from "./forms";
+import { createApi } from "./api";
 
 const port = 5000;
 
@@ -22,6 +23,7 @@ app.use(express.json());
 
 registerFormMiddleware(app);
 registerFormRoutes(app);
+createApi(app);
 
 app.use("^/$", (req, res) => res.redirect("/form"));
 
