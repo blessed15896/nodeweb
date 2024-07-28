@@ -5,6 +5,8 @@ export interface WebService<T> {
   getMany(query: any): Promise<T[]>;
   store(data: any): Promise<T | undefined>;
   delete(id: any): Promise<boolean>;
+  replace(id: any, data: any): Promise<T | undefined>;
+  modify(id: any, data: any): Promise<T | undefined>;
 }
 
 export function createAdapter<T>(
@@ -46,6 +48,24 @@ export function createAdapter<T>(
     try {
       res.json(await ws.delete(req.params.id));
       res.end();
+    } catch (err) {
+      writeResponse(err, res);
+    }
+  });
+
+  app.put(`${baseUrl}/:id`, async (req, res) => {
+    try {
+      res.json(await ws.replace(req.params.id, req.body));
+      res.end();
+    } catch (err) {
+      writeResponse(err, res);
+    }
+  });
+
+  app.patch(`${baseUrl}/:id`, async (req, res) => {
+    try {
+      res.json(await ws.modify(req.params.id, req.body));
+      res.json();
     } catch (err) {
       writeResponse(err, res);
     }
