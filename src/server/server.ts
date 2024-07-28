@@ -19,7 +19,11 @@ app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 
 app.use(helmet());
-app.use(express.json());
+app.use(
+  express.json({
+    type: ["application/json", "application/json-patch+json"],
+  })
+);
 
 registerFormMiddleware(app);
 registerFormRoutes(app);

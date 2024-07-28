@@ -35,7 +35,10 @@ export const ops = {
     await sendRequest(
       "PATCH",
       `/api/results/${id}`,
-      Object.fromEntries(Object.entries(values).filter(([p, v]) => v !== ""))
+      Object.entries(values)
+        .filter(([p, v]) => v !== "")
+        .map(([p, v]) => ({ op: "replace", path: "/" + p, value: v })),
+      "application/json-patch+json"
     );
   },
   Delete: async () => {
