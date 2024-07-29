@@ -1,4 +1,5 @@
 import type { Express, Response } from "express";
+import { ValidationError } from "./validation_types";
 
 export interface WebService<T> {
   getOne(id: any): Promise<T | undefined>;
@@ -73,7 +74,7 @@ export function createAdapter<T>(
 
   const writeResponse = (err: any, res: Response) => {
     console.error(err);
-    res.writeHead(500);
+    res.writeHead(err instanceof ValidationError ? 400 : 500);
     res.end();
   };
 }
