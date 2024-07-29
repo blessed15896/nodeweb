@@ -1,6 +1,19 @@
 import { input } from "@inquirer/prompts";
 
+let bearerToken;
+
 export const ops = {
+  "Sign In": async () => {
+    const creds = {
+      username: await input({ message: "Username?" }),
+      password: await input({ message: "Password?" }),
+    };
+    const response = await sendRequest("POST", "/api/signin", creds);
+    if (response.success) bearerToken = response.token;
+  },
+  "Sign Out": () => {
+    bearerToken = undefined;
+  },
   "Get All": async () => await sendRequest("GET", "/api/results"),
   "Get Name": async () => {
     const name = await input({ message: "Name?" });
@@ -59,9 +72,11 @@ const sendRequest = async (
   body,
   contentType = "application/json"
 ) => {
+  const headers = { "Content-Type": contentType };
+  if (bearerToken) headers["Authorization"] = `Bearer ${bearerToken}`;
   const response = await fetch(baseUrl + url, {
     method,
-    headers: { "Content-Type": contentType },
+    headers,
     body: JSON.stringify(body),
   });
   if (response.status == 200) {
@@ -69,5 +84,6 @@ const sendRequest = async (
     (Array.isArray(data) ? data : [data]).forEach((elem) =>
       console.log(JSON.stringify(elem))
     );
+    return data;
   } else console.log(response.status, " ", response.statusText);
 };
