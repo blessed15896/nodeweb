@@ -5,6 +5,7 @@ import helmet from "helmet";
 import { engine } from "express-handlebars";
 import { registerFormMiddleware, registerFormRoutes } from "./forms";
 import { createApi } from "./api";
+import { createAuth } from "./auth";
 
 const port = 5000;
 
@@ -26,6 +27,7 @@ app.use(
 );
 
 registerFormMiddleware(app);
+createAuth(app);
 registerFormRoutes(app);
 createApi(app);
 

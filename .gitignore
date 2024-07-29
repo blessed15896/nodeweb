@@ -4,3 +4,4 @@ age.db
 orm_age.db
 orm_sessions.db
 pkg_sessions.db
+orm_auth.db
