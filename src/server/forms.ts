@@ -4,6 +4,7 @@ import repository from "./data";
 import cookieParser from "cookie-parser";
 import { getSession, sessionMiddleware } from "./sessions/helper";
 import { Result } from "./data/repository";
+import { roleGuard } from "./auth";
 
 const rowLimit = 10;
 
@@ -18,14 +19,14 @@ export const registerFormRoutes = (app: Express) => {
     res.render("data", { data: await repository.getAllResults(rowLimit) });
   });
 
-  app.post("/form/delete/:id", async (req, res) => {
+  app.post("/form/delete/:id", roleGuard("Admins"), async (req, res) => {
     const id = Number.parseInt(req.params["id"]);
     await repository.delete(id);
     res.redirect("/form");
     res.end();
   });
 
-  app.post("/form/add", async (req, res) => {
+  app.post("/form/add", roleGuard("Users"), async (req, res) => {
     const nextage =
       Number.parseInt(req.body["age"]) + Number.parseInt(req.body["years"]);
     await repository.saveResult({ ...req.body, nextage } as Result);

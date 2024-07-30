@@ -1,4 +1,10 @@
-import type { Express } from "express";
+import type {
+  Express,
+  NextFunction,
+  RequestHandler,
+  Request,
+  Response,
+} from "express";
 import { AuthStore } from "./auth_types";
 import { OrmAuthStore } from "./orm_authstore";
 import jwt from "jsonwebtoken";
@@ -23,6 +29,23 @@ declare global {
 const jwtSecret = "mytokensecret";
 
 const store: AuthStore = new OrmAuthStore();
+
+export const roleGuard = (
+  role: string
+): RequestHandler<Request, Response, NextFunction> => {
+  return async (req, res, next) => {
+    if (req.authenticated) {
+      const username = req.user.username;
+      if (await store.validateMembership(username, role)) {
+        next();
+        return;
+      }
+      res.redirect("/unauthorized");
+    } else {
+      res.redirect("/signin");
+    }
+  };
+};
 
 export const createAuth = (app: Express) => {
   app.use((req, res, next) => {
@@ -84,4 +107,6 @@ export const createAuth = (app: Express) => {
   app.post("/signout", async (req, res) =>
     req.session.destroy(() => res.redirect("/"))
   );
+
+  app.get("/unauthorized", async (req, res) => res.render("unauthorized"));
 };

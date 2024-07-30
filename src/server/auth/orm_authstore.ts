@@ -1,6 +1,10 @@
-import { Sequelize } from "sequelize";
-import { AuthStore, Credentials } from "./auth_types";
-import { CredentialsModel, initializeAuthModels } from "./orm_auth_models";
+import { Op, Sequelize } from "sequelize";
+import { AuthStore, Credentials, Role } from "./auth_types";
+import {
+  CredentialsModel,
+  initializeAuthModels,
+  RoleModel,
+} from "./orm_auth_models";
 import { pbkdf2, randomBytes, timingSafeEqual } from "crypto";
 
 export class OrmAuthStore implements AuthStore {
@@ -22,6 +26,49 @@ export class OrmAuthStore implements AuthStore {
     await this.sequelize.sync();
     await this.storeOrUpdateUser("alice", "mysecret");
     await this.storeOrUpdateUser("bob", "mysecret");
+    await this.storeOrUpdateRole({ name: "Users", members: ["alice", "bob"] });
+    await this.storeOrUpdateRole({ name: "Admins", members: ["alice"] });
+  }
+
+  async getRole(name: string): Promise<Role | null> {
+    const stored = await RoleModel.findByPk(name, {
+      include: [{ model: CredentialsModel, attributes: ["username"] }],
+    });
+    if (stored)
+      return {
+        name: stored.name,
+        members: stored.CredentialsModels?.map((m) => m.username) ?? [],
+      };
+    return null;
+  }
+
+  async getRolesForUser(username: string): Promise<string[]> {
+    return (
+      await RoleModel.findAll({
+        include: [
+          { model: CredentialsModel, where: { username }, attributes: [] },
+        ],
+      })
+    ).map((rm) => rm.name);
+  }
+
+  async storeOrUpdateRole(role: Role): Promise<Role> {
+    return await this.sequelize.transaction(async (transaction) => {
+      const users = await CredentialsModel.findAll({
+        where: { username: { [Op.in]: role.members } },
+        transaction,
+      });
+      const [rm] = await RoleModel.findOrCreate({
+        where: { name: role.name },
+        transaction,
+      });
+      await rm.setCredentialsModels(users, { transaction });
+      return role;
+    });
+  }
+
+  async validateMembership(username: string, role: string): Promise<boolean> {
+    return (await this.getRolesForUser(username)).includes(role);
   }
 
   async getUser(name: string): Promise<Credentials | null> {
